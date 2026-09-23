@@ -63,25 +63,25 @@
       <div class="border-b border-gray-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 class="text-2xl font-bold text-white">配件資料查詢</h1>
         
-        <!-- 🌟 三個選擇方塊 -->
+        <!-- 🌟 三個選擇方塊 (已將「尺寸查詢」設為預設亮燈) -->
         <div class="flex bg-gray-900 p-1 rounded-lg border border-gray-800 text-xs font-semibold gap-1">
-          <button id="tabBtnPartNo" onclick="switchSearchTab('partNo')" class="px-3 py-1.5 rounded-md bg-blue-600 text-white transition">
+          <button id="tabBtnPartNo" onclick="switchSearchTab('partNo')" class="px-3 py-1.5 rounded-md text-gray-400 hover:text-white transition">
             料號查詢
           </button>
           <button id="tabBtnName" onclick="switchSearchTab('name')" class="px-3 py-1.5 rounded-md text-gray-400 hover:text-white transition">
             名稱查詢
           </button>
-          <button id="tabBtnSpec" onclick="switchSearchTab('spec')" class="px-3 py-1.5 rounded-md text-gray-400 hover:text-white transition">
+          <button id="tabBtnSpec" onclick="switchSearchTab('spec')" class="px-3 py-1.5 rounded-md bg-blue-600 text-white transition">
             尺寸查詢
           </button>
         </div>
       </div>
 
-      <!-- 🌟 搜尋卡片 1：料號查詢 -->
-      <div id="searchBoxPartNo" class="bg-gray-900 border border-gray-800 rounded-xl p-5 space-y-4 shadow-xl">
+      <!-- 🌟 搜尋卡片 1：料號查詢 (預設隱藏) -->
+      <div id="searchBoxPartNo" class="hidden bg-gray-900 border border-gray-800 rounded-xl p-5 space-y-4 shadow-xl">
         <div>
-          <label class="block text-xs font-medium text-gray-400 mb-1">料號查詢</label>
-          <input type="text" id="inputPartNo" placeholder="輸入完整或部分料號" 
+          <label class="block text-xs font-medium text-gray-400 mb-1">料號關鍵字</label>
+          <input type="text" id="inputPartNo" placeholder="請輸入完整或部分料號 (例如: SA07-1001)..." 
                  class="w-full bg-gray-950 border border-gray-700 text-white placeholder-gray-500 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
         </div>
 
@@ -98,8 +98,8 @@
       <!-- 🌟 搜尋卡片 2：名稱查詢 (預設隱藏) -->
       <div id="searchBoxName" class="hidden bg-gray-900 border border-gray-800 rounded-xl p-5 space-y-4 shadow-xl">
         <div>
-          <label class="block text-xs font-medium text-gray-400 mb-1">名稱查詢</label>
-          <input type="text" id="inputName" placeholder="" 
+          <label class="block text-xs font-medium text-gray-400 mb-1">名稱關鍵字</label>
+          <input type="text" id="inputName" placeholder="請輸入配件名稱 (例如: 墊圈、螺帽)..." 
                  class="w-full bg-gray-950 border border-gray-700 text-white placeholder-gray-500 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
         </div>
 
@@ -113,8 +113,8 @@
         </div>
       </div>
 
-      <!-- 🌟 搜尋卡片 3：尺寸查詢 (預設隱藏) -->
-      <div id="searchBoxSpec" class="hidden bg-gray-900 border border-gray-800 rounded-xl p-5 space-y-4 shadow-xl">
+      <!-- 🌟 搜尋卡片 3：尺寸查詢 (改為預設顯示) -->
+      <div id="searchBoxSpec" class="bg-gray-900 border border-gray-800 rounded-xl p-5 space-y-4 shadow-xl">
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label class="block text-xs font-medium text-gray-400 mb-1">長度</label>
@@ -160,7 +160,7 @@
     </div>
   </main>
 
-  <!-- ==================== 🌟 新增資料彈窗 (Modal) ==================== -->
+  <!-- ==================== 新增資料彈窗 (Modal) ==================== -->
   <div id="addModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-gray-900 border border-gray-800 rounded-xl w-full max-w-lg p-6 space-y-4 shadow-2xl overflow-y-auto max-h-[90vh]">
       
@@ -271,9 +271,9 @@
 
   <!-- ==================== JavaScript 邏輯 ==================== -->
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzPVTnNzsTv5f78Yxz3efoHN49zos9rDiCB3zFn6mIwlbsk8gvl6WatBeeOHy1_Ivje/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxHU5AuWKKx-MrG_DZBmAd3qXnFs5oL3fLStx_26fkzvC-Sb--faqz3eLm6Oq9zgw_x/exec";
 
-    // 🌟 切換三個搜尋頁籤
+    // 切換三個搜尋頁籤
     function switchSearchTab(tab) {
       const boxPartNo = document.getElementById('searchBoxPartNo');
       const boxName = document.getElementById('searchBoxName');
@@ -310,7 +310,7 @@
       hideAllStatus();
     }
 
-    // 🌟 1. 處理料號或名稱單項搜尋
+    // 1. 處理料號或名稱單項搜尋
     async function handleSearch(type) {
       let keyword = '';
       if (type === 'part_no') {
@@ -339,7 +339,7 @@
       }
     }
 
-    // 🌟 2. 處理尺寸搜尋
+    // 2. 處理尺寸搜尋
     async function handleSpecSearch() {
       const length = document.getElementById('inputLength').value.trim();
       const inner = document.getElementById('inputInner').value.trim();
@@ -401,14 +401,14 @@
             <h2 class="text-lg font-bold text-white mt-1">${index + 1}. ${data.name || '未命名配件'}</h2>
           </div>
 
-          <div class="grid grid-cols-2 gap-3 text--base">
+          <div class="grid grid-cols-2 gap-3 text-xs">
             <div class="bg-gray-950 p-2.5 rounded border border-gray-800">
-              <span class="text-gray-400">料號</span>
+              <span class="text-gray-400">料號 (part_no)</span>
               <p class="font-mono font-semibold text-blue-400 mt-0.5">${data.part_no || '-'}</p>
             </div>
 
             <div class="bg-gray-950 p-2.5 rounded border border-gray-800">
-              <span class="text-gray-400">當前儲位</span>
+              <span class="text-gray-400">當前儲位 (location_in)</span>
               <p class="font-mono font-extrabold text-amber-400 mt-0.5">${data.location_in || '無'}</p>
             </div>
 
@@ -417,7 +417,7 @@
               <p class="font-semibold text-gray-200 mt-0.5">${data.spec || '-'}</p>
             </div>
             <div class="bg-gray-950 p-2.5 rounded border border-gray-800">
-              <span class="text-gray-400">外部位置</span>
+              <span class="text-gray-400">外部位置 (location_out)</span>
               <p class="font-semibold text-orange-400 mt-0.5">${data.location_out || '無'}</p>
             </div>
           </div>
@@ -425,6 +425,7 @@
           <div class="bg-gray-950 p-3 rounded border border-gray-800 space-y-1 text-xs text-gray-400">
             <p><strong>條碼：</strong><span class="font-mono text-gray-300">${data.barcode || '-'}</span></p>
             <p><strong>詳細規格：</strong><span class="text-gray-200">${data.spec_detail || '-'}</span></p>
+            <p><strong>尺寸細節：</strong>長度 <span class="text-gray-200">${data.length || 0}</span> | 內徑 <span class="text-gray-200">${data.inner_dia || 0}</span> | 外徑 <span class="text-gray-200">${data.outer_dia || 0}</span></p>
             <p><strong>備註說明：</strong><span class="text-gray-300">${data.notes || '無'}</span></p>
           </div>
         `;
